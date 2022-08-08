@@ -8,10 +8,6 @@ import 'package:blocsqlitecrud/models/note.dart';
 class NoteEditPage extends StatelessWidget {
   const NoteEditPage({Key? key, this.note}) : super(key: key);
   final Note? note;
-  // o NotesCubit que foi criado e providenciado para o MaterialApp eh recuperado
-  // via construtor .value, lembrando que novas instancias nao usam o .value,
-  // somente as novas instancias de um cubit/bloc
-  // o NoteValidationCubit eh criado e providenciado para validacao dos campos
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -74,8 +70,6 @@ class NotesEditView extends StatelessWidget {
               ..showSnackBar(const SnackBar(
                 content: Text('Операция успешна'),
               ));
-            // apos a nota ser salva, as notas sao recuperadas novamente e
-            // o aplicativo apresenta novamenta a tela de lista de notas
             Navigator.pop(context);
             context.read<NotesCubit>().buscarNotas();
           } else if (state is NotesLoaded) {
@@ -107,16 +101,12 @@ class NotesEditView extends StatelessWidget {
                       textInputAction: TextInputAction.next,
                       onEditingComplete: _contentFocusNode.requestFocus,
                       onChanged: (text) {
-                        // a validacao eh realizada em toda alteracao do campo
                         context.read<NoteValidationCubit>().validaForm(
                             _titleController.text, _contentController.text);
                       },
                       onFieldSubmitted: (String value) {},
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        // o estado NotesValidating eh emitido quando ha erro de
-                        // validacao em qualquer campo do formulario e
-                        // a mensagem de erro tambem eh apresentada
                         if (state is NoteValidating) {
                           if (state.tituloMessage == '') {
                             return null;
@@ -138,13 +128,11 @@ class NotesEditView extends StatelessWidget {
                       focusNode: _contentFocusNode,
                       textInputAction: TextInputAction.done,
                       onChanged: (text) {
-                        // a validacao eh realizada em toda alteracao do campo
                         context.read<NoteValidationCubit>().validaForm(
                             _titleController.text, _contentController.text);
                       },
                       onFieldSubmitted: (String value) {
                         if (_formKey.currentState!.validate()) {
-                          //fechar teclado
                           FocusScope.of(context).unfocus();
                           context.read<NotesCubit>().salvarNota(note?.id,
                               _titleController.text, _contentController.text);
@@ -152,9 +140,6 @@ class NotesEditView extends StatelessWidget {
                       },
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        // o estado NotesValidating eh emitido quando ha erro de
-                        // validacao em qualquer campo do formulario e
-                        // a mensagem de erro tambem eh apresentada
                         if (state is NoteValidating) {
                           if (state.conteudoMessage == '') {
                             return null;
@@ -173,13 +158,10 @@ class NotesEditView extends StatelessWidget {
                     child:
                         BlocBuilder<NoteValidationCubit, NoteValidationState>(
                       builder: (context, state) {
-                        // o botao de salvar eh habilitado somente quando
-                        // o formulario eh completamente validado
                         return ElevatedButton(
                           onPressed: state is NoteValidated
                               ? () {
                                   if (_formKey.currentState!.validate()) {
-                                    //fechar teclado
                                     FocusScope.of(context).unfocus();
                                     context.read<NotesCubit>().salvarNota(
                                         note?.id,
