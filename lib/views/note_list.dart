@@ -7,9 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NoteListPage extends StatelessWidget {
   const NoteListPage({Key? key}) : super(key: key);
 
-  // o NotesCubit que foi criado e providenciado para o MaterialApp eh recuperado
-  // via construtor .value e executa a funcao de buscar as notas,
-  // ou seja, novas instancias nao usam o .value, instancias existentes sim
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -31,7 +28,6 @@ class DocumentosView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              // excluir todas as notas
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -65,8 +61,6 @@ class DocumentosView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          // como o FAB cria uma nota nova, a nota nao eh parametro recebido
-          // na tela de edicao
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -91,7 +85,6 @@ class _Content extends StatelessWidget {
         child: CircularProgressIndicator.adaptive(),
       );
     } else if (state is NotesLoaded) {
-      //a mensagem abaixo aparece se a lista de notas estiver vazia
       if (state.notes!.isEmpty) {
         return const Center(
           child: Text('Нету товаров. Что бы добавить, нажмите на плюс'),
@@ -140,7 +133,6 @@ class _NotesList extends StatelessWidget {
                 IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
-                      // excluir nota atraves do id
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
