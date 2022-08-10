@@ -12,9 +12,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // o repositorio de dados eh instanciado antes do app apresentar a lista de
-  // notas, essa instancia eh dependencia do NotesCubit que eh responsavel pelas
-  // regras de negocio do aplicativo
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
